@@ -1,3 +1,11 @@
+async function deleteMemo(e) {
+  const id = e.target.dataset.id;
+  // delete
+  const res = await fetch(`/memos/${id}`, { method: "DELETE" });
+
+  readMemo();
+}
+
 async function editMemo(e) {
   const id = e.target.dataset.id;
   const editInput = prompt("수정사항을 입력하세요.");
@@ -27,8 +35,14 @@ function displayMemo(memo) {
   editBtn.dataset.id = memo.id;
   editBtn.addEventListener("click", editMemo);
 
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "삭제";
+  deleteBtn.dataset.id = memo.id;
+  deleteBtn.addEventListener("click", deleteMemo);
+
   ul.append(li);
   li.append(editBtn);
+  li.append(deleteBtn);
 }
 
 async function readMemo() {
