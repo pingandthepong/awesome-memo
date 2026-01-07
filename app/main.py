@@ -5,7 +5,7 @@ from pydantic import BaseModel
 app = FastAPI()
 
 class Memo(BaseModel):
-  id: str
+  id: int
   content: str
 
 memos = []
@@ -18,5 +18,13 @@ def create_memo(memo: Memo):
 @app.get("/memos")
 def read_memo():
   return memos
+
+@app.put("/memos/{memo_id}")
+def put_memo(req_memo: Memo):
+  for memo in memos:
+    if memo.id == req_memo.id:
+      memo.content = req_memo.content
+      return "수정 성공"
+  return "id에 해당하는 메모가 없습니다."
 
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
